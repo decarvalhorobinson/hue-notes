@@ -90,7 +90,11 @@ class Note{
                 console.log(message);
                 var node = {name: message.text, text: message.text};
                 var jsonFile = path.join(__dirname, 'notes', filename);
-                fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
+                if(text){
+                    fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
+                }else{
+                    fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                }
                 function callback(){
 
                 }
