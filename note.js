@@ -6,42 +6,42 @@ var fs = require('fs');
 
 var userFolder = app.getPath('userData');
 
-var uniqueID = (function() {
+var uniqueID = (function () {
     var id = 0; // This is the private persistent value
     // The outer function returns a nested function that has access
     // to the persistent value.  It is this nested function we're storing
     // in the variable uniqueID above.
-    return function() { return id++; };  // Return and increment
- })(); 
+    return function () { return id++; };  // Return and increment
+})();
 
-class Note{
+class Note {
 
-    constructor(name, text, x, y, width, height, filename){
+    constructor(name, text, x, y, width, height, filename) {
         this.name = name;
         this.text = text;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        if(filename == undefined){
-            this.filename = new Date().getTime()+'.json';
-        }else{
+        if (filename == undefined) {
+            this.filename = new Date().getTime() + '.json';
+        } else {
             this.filename = filename;;
         }
-        
+
         this.id = uniqueID();
     }
 
+
     createWindow() {
         // Criar uma janela de navegação.
-         this.window = new BrowserWindow({
+        this.window = new BrowserWindow({
             x: this.x,
             y: this.y,
             width: this.width,
             height: this.height,
-            opacity: 0.0,
             frame: false,
-            icon: path.join(__dirname,'assets/icons/icon.png'),
+            icon: path.join(__dirname, 'assets/icons/icon.png'),
             transparent: true,
         })
         // e carrega index.html do app.
@@ -55,10 +55,10 @@ class Note{
         let winId = this.id;
         let win = this.window;
 
-    
+
         // Abre o DevTools.
         //this.window.webContents.openDevTools()
-    
+
         // Emitido quando a janela é fechada.
         this.window.on('closed', () => {
             // Elimina a referência do objeto da janela, geralmente você iria armazenar as janelas
@@ -70,18 +70,18 @@ class Note{
         this.window.on('move', () => {
             let position = this.window.getPosition();
             let size = this.window.getSize();
-            var node = {name: this.name, text: this.text, x: position[0], y: position[1], width: size[0], height: size[1] };
+            var node = { name: this.name, text: this.text, x: position[0], y: position[1], width: size[0], height: size[1] };
             var jsonFile = path.join(userFolder, 'notes', filename);
-            if(this.text){
+            if (this.text) {
                 fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
-            }else{
+            } else {
                 try {
                     fs.unlinkSync(path.join(userFolder, 'notes', filename));
-                } catch (error) {}
-                
+                } catch (error) { }
+
             }
 
-            function callback(){
+            function callback() {
 
             }
         })
@@ -89,30 +89,30 @@ class Note{
         this.window.on('resize', () => {
             let position = this.window.getPosition();
             let size = this.window.getSize();
-            var node = {name: this.name, text: this.text, x: position[0], y: position[1], width: size[0], height: size[1] };
+            var node = { name: this.name, text: this.text, x: position[0], y: position[1], width: size[0], height: size[1] };
             var jsonFile = path.join(userFolder, 'notes', filename);
-            if(this.text){
+            if (this.text) {
                 fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
-            }else{
+            } else {
                 try {
                     fs.unlinkSync(path.join(userFolder, 'notes', filename));
-                } catch (error) {}
-                
+                } catch (error) { }
+
             }
 
-            function callback(){
+            function callback() {
 
             }
         })
 
         this.window.webContents.on('did-finish-load', () => {
-            let obj = {windowId: this.id, text:  this.text};
+            let obj = { windowId: this.id, text: this.text };
             this.window.webContents.send('message', obj);
         });
-        
+
         ipcMain.on('closeWindow', closeWindowFn);
         function closeWindowFn(e, wId) {
-            if(wId ==  winId){
+            if (wId == winId) {
                 if (app.showExitPrompt) {
                     e.preventDefault() // Prevents the window from closing 
                     dialog.showMessageBox({
@@ -124,53 +124,53 @@ class Note{
                         if (response === 0) { // Runs the following if 'Yes' is clicked
                             try {
                                 fs.unlinkSync(path.join(userFolder, 'notes', filename));
-                            } catch (error) {}
+                            } catch (error) { }
                             win.close();
                         }
                     })
                 }
             }
-            
+
         }
 
         ipcMain.on('addWindow', addWindowFn);
-        
+
         function addWindowFn(e, wId) {
-            if(wId ==  winId){
+            if (wId == winId) {
                 let nt = new Note("", "", undefined, undefined, 200, 200, undefined);
-                    nt.createWindow();
+                nt.createWindow();
             }
         }
 
         ipcMain.on('saveText', (e, message) => {
             let wId = message.windowId;
             let text = message.text;
-            
-            if(winId == wId){
+
+            if (winId == wId) {
                 let position = this.window.getPosition();
                 let size = this.window.getSize();
-                
-                var node = {name: this.name, text: text, x: position[0], y: position[1], width: size[0], height: size[1] };
+
+                var node = { name: this.name, text: text, x: position[0], y: position[1], width: size[0], height: size[1] };
                 var jsonFile = path.join(userFolder, 'notes', filename);
-                if(text){
+                if (text) {
                     fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
-                }else{
+                } else {
                     try {
                         fs.unlinkSync(path.join(userFolder, 'notes', filename));
-                    } catch (error) {}
-                    
+                    } catch (error) { }
+
                 }
-                function callback(){
+                function callback() {
 
                 }
             }
-            
-            
+
+
         })
 
         return this.window;
-}
-    
+    }
+
 
 
 }
