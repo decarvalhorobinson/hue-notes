@@ -32,6 +32,7 @@ function createWindow() {
             win = noteteste.createWindow();
         }
         for (var i=0; i<notes.length; i++){
+
             let noteteste = new Note(notes[i].text, notes[i].text,notes[i].x, notes[i].y, notes[i].width, notes[i].height, items[i]);
             win = noteteste.createWindow();
         }
