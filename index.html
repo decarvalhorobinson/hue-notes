@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Olá Mundo!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
 </head>
 
@@ -14,18 +16,8 @@
         <div id="windowId" style="display:inline"></div>
     </header>
     
-    <div id="note-text" class="transparency-set">
-        Teste de bloco de notas
-    </div>
-
-    <div class="transparency-set">
-            adf asfas dfas dfd 
-            <div>
-                teste
-                <div>
-                    teste2
-                </div>
-            </div>
+    <div id="note-text" contentEditable="true" class="transparency-set">
+        Write here!
     </div>
     <script>
         const electron = require('electron');
@@ -33,7 +25,7 @@
         const closeButton = document.querySelector('#closeButton');
         closeButton.addEventListener('click', closeButtonFn);
         function closeButtonFn(){
-            ipcRenderer.send('closeWindow');
+            ipcRenderer.send('closeWindow', document.querySelector('#windowId').innerHTML);
         }
 
         const addButton = document.querySelector('#addButton');
@@ -46,7 +38,15 @@
             document.querySelector('#note-text').innerHTML = message.text;
             document.querySelector('#windowId').innerHTML = message.windowId;
         })
+
+        const noteText = document.querySelector('#note-text');
+        noteText.addEventListener('keyup', saveText);
+        function saveText(){
+            ipcRenderer.send('saveText', {text: noteText.innerHTML, windowId: document.querySelector('#windowId').innerHTML});
+        }
+
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 </body>
 
 </html>

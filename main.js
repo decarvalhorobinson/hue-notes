@@ -9,22 +9,35 @@ let win
 
 let notes = [];
 
-var fs = require('fs'), filePath = path.join(__dirname, 'notes.json');
+var fs = require('fs');
+var folder = path.join(__dirname, 'notes');
+var items = fs.readdirSync(folder);
+    console.log(items);
+ 
+for (var i=0; i<items.length; i++) {
+    var filePath = path.join(folder, items[i]);
+    
+    var data = fs.readFileSync(filePath, { encoding: 'utf-8' });
+    notes.push(JSON.parse(data));
+}
 
-fs.readFile(filePath, { encoding: 'utf-8' }, function (err, data) {
-    if (!err) {
-        notes = JSON.parse(data);
-    } else {
-        console.log(err);
-    }
-});
+
+
 
 function createWindow() {
 
     var aWhile = 1; // 1 milisecond to enable transparency in the first window
     var doSomethingAfterAWhile = function () {
-        let noteteste = new Note('test header', 'test body note');
-        win = noteteste.createWindow();
+        if(notes.length == 0){
+            let noteteste = new Note("", "");
+            win = noteteste.createWindow();
+        }
+        for (var i=0; i<notes.length; i++){
+            console.log(notes);
+            let noteteste = new Note(notes[i].text, notes[i].text, items[i]);
+            win = noteteste.createWindow();
+        }
+        
     }
     setTimeout(doSomethingAfterAWhile, aWhile);
 
@@ -58,3 +71,6 @@ app.on('activate', () => {
 })
 
 app.commandLine.appendSwitch('enable-transparent-visuals disable-gpu');
+
+
+
