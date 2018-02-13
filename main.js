@@ -28,7 +28,7 @@ function createWindow() {
     var aWhile = 1; // 1 milisecond to enable transparency in the first window
     var doSomethingAfterAWhile = function () {
         if(notes.length == 0){
-            let noteteste = new Note("", "", undefined, undefined, 200, 200, undefined);
+            let noteteste = new Note("", "", undefined, undefined, 250, 250, undefined);
             win = noteteste.createWindow();
         }
         for (var i=0; i<notes.length; i++){

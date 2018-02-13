@@ -1,0 +1,69 @@
+body {
+    background-color: rgba(171, 237, 242, 0.9);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family:  Arial, Helvetica, sans-serif;
+    color: rgb(51, 49, 75);
+    font-size: 15px;
+    
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+.nav{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    background-color: rgba(0, 187, 211, 0.8);
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    padding: 0.3em;
+    border-bottom: 1px dashed rgb(130, 240, 255);; 
+}
+
+
+.win-btn{
+    -webkit-app-region: no-drag;
+    padding: 0.5em;
+    cursor: pointer;
+    display: block;
+    width: auto;
+    height: auto;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    
+}
+
+.win-btn:hover{
+    -webkit-app-region: no-drag;
+    padding: 0.5em;
+    cursor: pointer;
+    display: block;
+    width: auto;
+    height: auto;
+    color: white;
+    background-color: rgba(24, 24, 11, 0.3);
+    text-align: center;
+    font-weight: bold;
+    
+}
+
+.note-text{
+    padding: 0.1em;
+    flex-basis: auto;
+    font-size: 1.5em;;
+}
+
+.note-text-content{
+    height: 100%;
+    width: 100%;
+}
+
+[contenteditable]:focus {
+    outline: 0px solid transparent;
+}

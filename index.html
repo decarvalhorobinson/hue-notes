@@ -4,22 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Hue Note</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="main.css">
+    <script defer src="./assets/font/fontawesome-all.js"></script>
+    <link rel="stylesheet" href="./assets/css/main.css">
 </head>
 
 <body>
-    <header>
-        <div class="header-buttons">
-            <div class="header-buttons" id="closeButton">x</div>
-            <div class="header-buttons" id="addButton">+</div>
-            <div class="header-buttons" id="windowId" style="display:inline; position: relative;"></div>
-        </div>
-    </header>
-    <div class="note-text">
-        <div id="note-text" class="note-text-content" contentEditable="true">
-            Write here!
+    <div class="wrapper">
+        <header class="nav">
+            <div id="addButton" class="win-btn"><i class="fas fa-plus"></i></div>
+            <div id="windowId" class="win-btn" style="display:none">id</div>
+            <div id="closeButton" class="win-btn"><i class="fa fa-times"></i></div>
+        </header>
+        <div class="note-text">
+            <div id="note-text" class="note-text-content" contentEditable="true">
+                Write here!
+            </div>
         </div>
     </div>
     <script>
@@ -64,7 +63,6 @@
         };
 
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 </body>
 
 </html>
