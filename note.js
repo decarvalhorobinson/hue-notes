@@ -67,7 +67,9 @@ class Note{
         ipcMain.on('closeWindow', closeWindowFn);
         function closeWindowFn(e, wId) {
             if(wId ==  winId){
-                fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                try {
+                    fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                } catch (error) {}
                 win.close();
             }
             
@@ -93,7 +95,10 @@ class Note{
                 if(text){
                     fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
                 }else{
-                    fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                    try {
+                        fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                    } catch (error) {}
+                    
                 }
                 function callback(){
 
