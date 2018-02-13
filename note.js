@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
 
+var fs = require('fs');
+
 var uniqueID = (function() {
     var id = 0; // This is the private persistent value
     // The outer function returns a nested function that has access
@@ -12,9 +14,15 @@ var uniqueID = (function() {
 
 class Note{
 
-    constructor(name, text){
+    constructor(name, text, filename){
         this.name = name;
         this.text = text;
+        if(filename == undefined){
+            this.filename = new Date().getTime()+'.json';
+        }else{
+            this.filename = filename;;
+        }
+        
         this.id = uniqueID();
         console.log(this.id);
     }
@@ -53,26 +61,42 @@ class Note{
             let obj = {windowId: this.id, text:  this.text};
             this.window.webContents.send('message', obj);
         });
-
+        var filename = this.filename;
+        let winId = this.id;
         let win = this.window;
         ipcMain.on('closeWindow', closeWindowFn);
-        function closeWindowFn() {
-            //win.close();
-            try {
-                BrowserWindow.getFocusedWindow().close();
-            } catch (error) {
-                
+        function closeWindowFn(e, wId) {
+            if(wId ==  winId){
+                fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                win.close();
             }
             
         }
 
         ipcMain.on('addWindow', addWindowFn);
-        let winId = this.id;
+        
         function addWindowFn(e, wId) {
             if(wId ==  winId){
-                let nt = new Note('teste', 'teste');
+                let nt = new Note('', '');
                     nt.createWindow();
             }
+        }
+
+        ipcMain.on('saveText', saveTextFn);
+        function saveTextFn(e, message) {
+            let wId = message.windowId;
+            let text = message.text;
+            if(winId == wId){
+                console.log(message);
+                var node = {name: message.text, text: message.text};
+                var jsonFile = path.join(__dirname, 'notes', filename);
+                fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
+                function callback(){
+
+                }
+            }
+            
+            
         }
 
 
