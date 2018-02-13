@@ -28,7 +28,7 @@ function createWindow() {
     var aWhile = 1; // 1 milisecond to enable transparency in the first window
     var doSomethingAfterAWhile = function () {
         if(notes.length == 0){
-            let noteteste = new Note("", "");
+            let noteteste = new Note("", "", undefined, undefined, 200, 200, undefined);
             win = noteteste.createWindow();
         }
         for (var i=0; i<notes.length; i++){
@@ -47,7 +47,8 @@ function createWindow() {
 // Este método será chamado quando o Electron tiver finalizado
 // a inicialização e está pronto para criar a janela browser.
 // Algumas APIs podem ser usadas somente depois que este evento ocorre.
-app.on('ready', createWindow)
+app.on('ready', createWindow);
+app.showExitPrompt = true;
 
 
 

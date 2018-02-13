@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('path')
 const url = require('url')
 
@@ -62,6 +62,7 @@ class Note{
             // em um array, se seu app suporta várias janelas, este é o momento
             // quando você deve excluir o elemento correspondente.
             this.window = null
+
         })
         this.window.on('move', () => {
             let position = this.window.getPosition();
@@ -109,10 +110,22 @@ class Note{
         ipcMain.on('closeWindow', closeWindowFn);
         function closeWindowFn(e, wId) {
             if(wId ==  winId){
-                try {
-                    fs.unlinkSync(path.join(__dirname, 'notes', filename));
-                } catch (error) {}
-                win.close();
+                if (app.showExitPrompt) {
+                    e.preventDefault() // Prevents the window from closing 
+                    dialog.showMessageBox({
+                        type: 'question',
+                        buttons: ['Yes', 'No'],
+                        title: 'Confirm',
+                        message: 'Are you sure you want to delete?'
+                    }, function (response) {
+                        if (response === 0) { // Runs the following if 'Yes' is clicked
+                            try {
+                                fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                            } catch (error) {}
+                            win.close();
+                        }
+                    })
+                }
             }
             
         }
@@ -121,7 +134,7 @@ class Note{
         
         function addWindowFn(e, wId) {
             if(wId ==  winId){
-                let nt = new Note('', '');
+                let nt = new Note("", "", undefined, undefined, 200, 200, undefined);
                     nt.createWindow();
             }
         }
