@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Olá Mundo!</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <header>
+        <div id="closeButton">x</div>
+        <div id="addButton">+</div>
+        <div id="windowId" style="display:inline"></div>
+    </header>
+    
+    <div id="note-text" class="transparency-set">
+        Teste de bloco de notas
+    </div>
+
+    <div class="transparency-set">
+            adf asfas dfas dfd 
+            <div>
+                teste
+                <div>
+                    teste2
+                </div>
+            </div>
+    </div>
+    <script>
+        const electron = require('electron');
+        const {ipcRenderer} = electron;
+        const closeButton = document.querySelector('#closeButton');
+        closeButton.addEventListener('click', closeButtonFn);
+        function closeButtonFn(){
+            ipcRenderer.send('closeWindow');
+        }
+
+        const addButton = document.querySelector('#addButton');
+        addButton.addEventListener('click', addButtonFn);
+        function addButtonFn(){
+            ipcRenderer.send('addWindow', document.querySelector('#windowId').innerHTML);
+        }
+
+        ipcRenderer.on('message', (event, message) => {
+            document.querySelector('#note-text').innerHTML = message.text;
+            document.querySelector('#windowId').innerHTML = message.windowId;
+        })
+    </script>
+</body>
+
+</html>

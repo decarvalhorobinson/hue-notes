@@ -1,0 +1,19 @@
+{
+  "name": "hue-notes",
+  "version": "1.0.0",
+  "description": "A note app for myself",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron --enable-transparent-visuals --disable-gpu ."
+  },
+  "keywords": [
+    "notes",
+    "app",
+    "windowslike"
+  ],
+  "author": "Robinson Carvalho",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^1.8.2"
+  }
+}

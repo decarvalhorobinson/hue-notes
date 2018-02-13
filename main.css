@@ -1,0 +1,30 @@
+html, body {
+    background-color: rgba(245, 245, 220, 0.6);
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+header{
+    position: relative;
+    -webkit-app-region: drag;
+    background-color: rgba(230, 126, 0, 0.6);
+    height: 1.5em;
+}
+
+#closeButton{
+    display: inline;
+    cursor: pointer;
+    padding: 5px;
+    -webkit-app-region: no-drag;
+    position: relative;
+    vertical-align: middle;
+}
+#addButton{
+    display: inline;
+    cursor: pointer;
+    padding: 5px;
+    -webkit-app-region: no-drag;
+    position: relative;
+    vertical-align: middle;
+}
