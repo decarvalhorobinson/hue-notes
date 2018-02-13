@@ -134,7 +134,7 @@ class Note{
         
         function addWindowFn(e, wId) {
             if(wId ==  winId){
-                let nt = new Note("", "", undefined, undefined, 200, 200, undefined);
+                let nt = new Note("", "", undefined, undefined, 250, 250, undefined);
                     nt.createWindow();
             }
         }
