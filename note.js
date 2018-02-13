@@ -14,9 +14,13 @@ var uniqueID = (function() {
 
 class Note{
 
-    constructor(name, text, filename){
+    constructor(name, text, x, y, width, height, filename){
         this.name = name;
         this.text = text;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
         if(filename == undefined){
             this.filename = new Date().getTime()+'.json';
         }else{
@@ -24,25 +28,29 @@ class Note{
         }
         
         this.id = uniqueID();
-        console.log(this.id);
     }
 
     createWindow() {
         // Criar uma janela de navegação.
          this.window = new BrowserWindow({
-            width: 200,
-            height: 200,
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: this.height,
             opacity: 0.0,
             frame: false,
             transparent: true,
         })
-    
         // e carrega index.html do app.
         this.window.loadURL(url.format({
             pathname: path.join(__dirname, 'index.html'),
             protocol: 'file:',
             slashes: true
         }))
+
+        var filename = this.filename;
+        let winId = this.id;
+        let win = this.window;
 
     
         // Abre o DevTools.
@@ -55,15 +63,49 @@ class Note{
             // quando você deve excluir o elemento correspondente.
             this.window = null
         })
+        this.window.on('move', () => {
+            let position = this.window.getPosition();
+            let size = this.window.getSize();
+            var node = {name: this.name, text: this.text, x: position[0], y: position[1], width: size[0], height: size[1] };
+            var jsonFile = path.join(__dirname, 'notes', filename);
+            if(this.text){
+                fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
+            }else{
+                try {
+                    fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                } catch (error) {}
+                
+            }
+
+            function callback(){
+
+            }
+        })
+
+        this.window.on('resize', () => {
+            let position = this.window.getPosition();
+            let size = this.window.getSize();
+            var node = {name: this.name, text: this.text, x: position[0], y: position[1], width: size[0], height: size[1] };
+            var jsonFile = path.join(__dirname, 'notes', filename);
+            if(this.text){
+                fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
+            }else{
+                try {
+                    fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                } catch (error) {}
+                
+            }
+
+            function callback(){
+
+            }
+        })
 
         this.window.webContents.on('did-finish-load', () => {
-            console.log(this.text);
             let obj = {windowId: this.id, text:  this.text};
             this.window.webContents.send('message', obj);
         });
-        var filename = this.filename;
-        let winId = this.id;
-        let win = this.window;
+        
         ipcMain.on('closeWindow', closeWindowFn);
         function closeWindowFn(e, wId) {
             if(wId ==  winId){
@@ -84,13 +126,15 @@ class Note{
             }
         }
 
-        ipcMain.on('saveText', saveTextFn);
-        function saveTextFn(e, message) {
+        ipcMain.on('saveText', (e, message) => {
             let wId = message.windowId;
             let text = message.text;
+            
             if(winId == wId){
-                console.log(message);
-                var node = {name: message.text, text: message.text};
+                let position = this.window.getPosition();
+                let size = this.window.getSize();
+                
+                var node = {name: this.name, text: text, x: position[0], y: position[1], width: size[0], height: size[1] };
                 var jsonFile = path.join(__dirname, 'notes', filename);
                 if(text){
                     fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
@@ -106,7 +150,7 @@ class Note{
             }
             
             
-        }
+        })
 
 
 }

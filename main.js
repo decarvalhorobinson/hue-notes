@@ -12,7 +12,6 @@ let notes = [];
 var fs = require('fs');
 var folder = path.join(__dirname, 'notes');
 var items = fs.readdirSync(folder);
-    console.log(items);
  
 for (var i=0; i<items.length; i++) {
     var filePath = path.join(folder, items[i]);
@@ -33,8 +32,7 @@ function createWindow() {
             win = noteteste.createWindow();
         }
         for (var i=0; i<notes.length; i++){
-            console.log(notes);
-            let noteteste = new Note(notes[i].text, notes[i].text, items[i]);
+            let noteteste = new Note(notes[i].text, notes[i].text,notes[i].x, notes[i].y, notes[i].width, notes[i].height, items[i]);
             win = noteteste.createWindow();
         }
         
