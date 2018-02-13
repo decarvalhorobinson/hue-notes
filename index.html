@@ -11,13 +11,16 @@
 
 <body>
     <header>
-        <div id="closeButton">x</div>
-        <div id="addButton">+</div>
-        <div id="windowId" style="display:inline"></div>
+        <div class="header-buttons">
+            <div class="header-buttons" id="closeButton">x</div>
+            <div class="header-buttons" id="addButton">+</div>
+            <div class="header-buttons" id="windowId" style="display:inline; position: relative;"></div>
+        </div>
     </header>
-
-    <div id="note-text" contentEditable="true" class="transparency-set">
-        Write here!
+    <div class="note-text">
+        <div id="note-text" class="note-text-content" contentEditable="true">
+            Write here!
+        </div>
     </div>
     <script>
         const electron = require('electron');
