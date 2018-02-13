@@ -4,6 +4,8 @@ const url = require('url')
 
 var fs = require('fs');
 
+var userFolder = app.getPath('userData');
+
 var uniqueID = (function() {
     var id = 0; // This is the private persistent value
     // The outer function returns a nested function that has access
@@ -39,6 +41,7 @@ class Note{
             height: this.height,
             opacity: 0.0,
             frame: false,
+            icon: path.join(__dirname,'assets/icons/icon.png'),
             transparent: true,
         })
         // e carrega index.html do app.
@@ -68,12 +71,12 @@ class Note{
             let position = this.window.getPosition();
             let size = this.window.getSize();
             var node = {name: this.name, text: this.text, x: position[0], y: position[1], width: size[0], height: size[1] };
-            var jsonFile = path.join(__dirname, 'notes', filename);
+            var jsonFile = path.join(userFolder, 'notes', filename);
             if(this.text){
                 fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
             }else{
                 try {
-                    fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                    fs.unlinkSync(path.join(userFolder, 'notes', filename));
                 } catch (error) {}
                 
             }
@@ -87,12 +90,12 @@ class Note{
             let position = this.window.getPosition();
             let size = this.window.getSize();
             var node = {name: this.name, text: this.text, x: position[0], y: position[1], width: size[0], height: size[1] };
-            var jsonFile = path.join(__dirname, 'notes', filename);
+            var jsonFile = path.join(userFolder, 'notes', filename);
             if(this.text){
                 fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
             }else{
                 try {
-                    fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                    fs.unlinkSync(path.join(userFolder, 'notes', filename));
                 } catch (error) {}
                 
             }
@@ -120,7 +123,7 @@ class Note{
                     }, function (response) {
                         if (response === 0) { // Runs the following if 'Yes' is clicked
                             try {
-                                fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                                fs.unlinkSync(path.join(userFolder, 'notes', filename));
                             } catch (error) {}
                             win.close();
                         }
@@ -134,7 +137,7 @@ class Note{
         
         function addWindowFn(e, wId) {
             if(wId ==  winId){
-                let nt = new Note("", "", undefined, undefined, 250, 250, undefined);
+                let nt = new Note("", "", undefined, undefined, 200, 200, undefined);
                     nt.createWindow();
             }
         }
@@ -148,12 +151,12 @@ class Note{
                 let size = this.window.getSize();
                 
                 var node = {name: this.name, text: text, x: position[0], y: position[1], width: size[0], height: size[1] };
-                var jsonFile = path.join(__dirname, 'notes', filename);
+                var jsonFile = path.join(userFolder, 'notes', filename);
                 if(text){
                     fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
                 }else{
                     try {
-                        fs.unlinkSync(path.join(__dirname, 'notes', filename));
+                        fs.unlinkSync(path.join(userFolder, 'notes', filename));
                     } catch (error) {}
                     
                 }
@@ -165,7 +168,7 @@ class Note{
             
         })
 
-
+        return this.window;
 }
     
 

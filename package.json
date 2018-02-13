@@ -4,7 +4,10 @@
   "description": "A note app for myself",
   "main": "main.js",
   "scripts": {
-    "start": "electron --enable-transparent-visuals --disable-gpu ."
+    "start": "electron --enable-transparent-visuals --disable-gpu .",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=win32 --arch=x64 --icon=assets/icons/icon.ico --prune=true --out=release-builds/win --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName='Electron Tutorial App'",
+    "package-linux": "electron-packager . hue-notes --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/icon.png --prune=true --out=release-builds"
   },
   "keywords": [
     "notes",
@@ -14,6 +17,8 @@
   "author": "Robinson Carvalho",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.8.2"
+    "electron": "^1.8.2",
+    "electron-builder": "^20.0.4",
+    "electron-packager": "^11.0.1"
   }
 }

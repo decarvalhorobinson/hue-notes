@@ -10,12 +10,19 @@ let win
 let notes = [];
 
 var fs = require('fs');
-var folder = path.join(__dirname, 'notes');
+
+var folder = path.join(app.getPath('userData'), 'notes');
+try {
+    fs.mkdirSync(folder);
+} catch (error) {
+    
+}
+
 var items = fs.readdirSync(folder);
  
 for (var i=0; i<items.length; i++) {
     var filePath = path.join(folder, items[i]);
-    
+    console.log(filePath);
     var data = fs.readFileSync(filePath, { encoding: 'utf-8' });
     notes.push(JSON.parse(data));
 }
@@ -35,6 +42,8 @@ function createWindow() {
 
             let noteteste = new Note(notes[i].text, notes[i].text,notes[i].x, notes[i].y, notes[i].width, notes[i].height, items[i]);
             win = noteteste.createWindow();
+
+            win.show();
         }
         
     }
@@ -42,6 +51,19 @@ function createWindow() {
 
     
 
+}
+
+const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (win) {
+        if (win.isMinimized()) win.restore()
+        win.focus()
+    }
+})
+
+if (shouldQuit) {
+    app.quit()
+    return
 }
 
 // Este método será chamado quando o Electron tiver finalizado
@@ -70,7 +92,7 @@ app.on('activate', () => {
     }
 })
 
-app.commandLine.appendSwitch('enable-transparent-visuals disable-gpu');
+//app.commandLine.appendSwitch('enable-transparent-visuals disable-gpu');
 
 
 
