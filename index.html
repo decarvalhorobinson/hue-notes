@@ -9,8 +9,8 @@
 </head>
 
 <body>
-    <div class="wrapper">
-        <header class="nav">
+    <div class="wrapper" id="wrapper">
+        <header class="nav" id="nav">
             <div id="addButton" class="win-btn"><i class="fas fa-plus"></i></div>
             <div id="windowId" class="win-btn" style="display:none">id</div>
             <div id="closeButton" class="win-btn"><i class="far fa-trash-alt"></i></div>
@@ -27,7 +27,7 @@
         const closeButton = document.querySelector('#closeButton');
         closeButton.addEventListener('click', closeButtonFn);
         function closeButtonFn() {
-            ipcRenderer.send('closeWindow', document.querySelector('#windowId').innerHTML);
+            ipcRenderer.send('deleteNote', document.querySelector('#windowId').innerHTML);
         }
 
         const addButton = document.querySelector('#addButton');
@@ -41,11 +41,23 @@
             document.querySelector('#windowId').innerHTML = message.windowId;
         })
 
+        ipcRenderer.on('blur', () => {
+            document.querySelector(".nav").style.visibility = "hidden";
+            document.querySelector(".note-text-content").style.overflow = "hidden";
+        })
+
+        ipcRenderer.on('focus', () => {
+            document.querySelector(".nav").style.visibility = "visible";
+            document.querySelector(".note-text-content").style.overflow = "auto";
+        })
+
+
         const noteText = document.querySelector('#note-text');
         noteText.addEventListener('keyup', saveText);
         function saveText() {
             ipcRenderer.send('saveText', { text: noteText.innerHTML, windowId: document.querySelector('#windowId').innerHTML });
         }
+
 
         window.onbeforeunload = function (e) {
             var remote = require('remote');

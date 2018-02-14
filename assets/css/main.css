@@ -1,30 +1,40 @@
+html{
+    height: 100%;
+}
 body {
-    background-color: rgba(171, 237, 242, 0.9);
+    background-color: rgba(171, 237, 242, 0.95);
     margin: 0;
     padding: 0;
     height: 100vh;
     font-family:  Arial, Helvetica, sans-serif;
     color: rgb(51, 49, 75);
     font-size: 15px;
+    height: 100%;
     
 }
 
 .wrapper{
     display: flex;
+    height: 100%;;
+    align-content: stretch;
     flex-direction: column;
+    margin-left: 1px;
+    margin-right: 1px;
+    outline: 1px rgb(187, 230, 255) inset;   
 }
 
 .nav{
     display: flex;
+    height: auto;
+    min-height: 2em;
     justify-content: space-between;
     align-content: center;
     background-color: rgba(0, 187, 211, 0.8);
+    border-bottom: 1px dashed rgb(130, 240, 255);
     -webkit-user-select: none;
     -webkit-app-region: drag;
-    padding: 0.3em;
-    border-bottom: 1px dashed rgb(130, 240, 255);; 
+    visibility: hidden;
 }
-
 
 .win-btn{
     -webkit-app-region: no-drag;
@@ -43,7 +53,6 @@ body {
     -webkit-app-region: no-drag;
     padding: 0.5em;
     cursor: pointer;
-    display: block;
     width: auto;
     height: auto;
     color: white;
@@ -54,12 +63,15 @@ body {
 }
 
 .note-text{
-    padding: 0.1em;
-    flex-basis: auto;
-    font-size: 1.5em;;
+    display: flex;
+    height: 100%;
+    flex-grow: 1;
+    font-size: 1.2em;
 }
 
 .note-text-content{
+    padding: 0em 1em 0em 1em;
+    overflow: auto;
     height: 100%;
     width: 100%;
 }

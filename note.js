@@ -35,15 +35,22 @@ class Note {
 
     createWindow() {
         // Criar uma janela de navegação.
+        var skipTaskbarIn  = false;
+        if(this.id !== 0){
+            skipTaskbarIn = true;
+        }
         this.window = new BrowserWindow({
             x: this.x,
             y: this.y,
+            tabbingIdentifier: "tab",
+            skipTaskbar: skipTaskbarIn,
             width: this.width,
             height: this.height,
             frame: false,
             icon: path.join(__dirname, 'assets/icons/icon.png'),
             transparent: true,
         })
+        this.window.setSkipTaskbar
         // e carrega index.html do app.
         this.window.loadURL(url.format({
             pathname: path.join(__dirname, 'index.html'),
@@ -51,32 +58,20 @@ class Note {
             slashes: true
         }))
 
-        var filename = this.filename;
-        let winId = this.id;
-        let win = this.window;
-
 
         // Abre o DevTools.
         //this.window.webContents.openDevTools()
-
-        // Emitido quando a janela é fechada.
-        this.window.on('closed', () => {
-            // Elimina a referência do objeto da janela, geralmente você iria armazenar as janelas
-            // em um array, se seu app suporta várias janelas, este é o momento
-            // quando você deve excluir o elemento correspondente.
-            this.window = null
-
-        })
+        
         this.window.on('move', () => {
             let position = this.window.getPosition();
             let size = this.window.getSize();
             var node = { name: this.name, text: this.text, x: position[0], y: position[1], width: size[0], height: size[1] };
-            var jsonFile = path.join(userFolder, 'notes', filename);
+            var jsonFile = path.join(userFolder, 'notes', this.filename);
             if (this.text) {
                 fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
             } else {
                 try {
-                    fs.unlinkSync(path.join(userFolder, 'notes', filename));
+                    fs.unlinkSync(path.join(userFolder, 'notes', this.filename));
                 } catch (error) { }
 
             }
@@ -90,7 +85,7 @@ class Note {
             let position = this.window.getPosition();
             let size = this.window.getSize();
             var node = { name: this.name, text: this.text, x: position[0], y: position[1], width: size[0], height: size[1] };
-            var jsonFile = path.join(userFolder, 'notes', filename);
+            var jsonFile = path.join(userFolder, 'notes', this.filename);
             if (this.text) {
                 fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
             } else {
@@ -105,53 +100,46 @@ class Note {
             }
         })
 
+        this.window.on('closed', () => {
+            ipcMain.emit('closeAll');
+        })
+
+        this.window.on('blur', () => {
+            this.window.webContents.send('blur');
+        })
+
+        this.window.on('focus', () => {
+            this.window.webContents.send('focus');
+        })
+
+        this.window.on('minimize', () => {
+            ipcMain.emit('minimizeAll');
+        });
+
+        this.window.on('restore', () => {
+            ipcMain.emit('restoreAll');
+        });
+        
+
         this.window.webContents.on('did-finish-load', () => {
             let obj = { windowId: this.id, text: this.text };
             this.window.webContents.send('message', obj);
+            this.window.focus();
+            this.window.webContents.send('focus');
         });
 
-        ipcMain.on('closeWindow', closeWindowFn);
-        function closeWindowFn(e, wId) {
-            if (wId == winId) {
-                if (app.showExitPrompt) {
-                    e.preventDefault() // Prevents the window from closing 
-                    dialog.showMessageBox({
-                        type: 'question',
-                        buttons: ['Yes', 'No'],
-                        title: 'Confirm',
-                        message: 'Are you sure you want to delete?'
-                    }, function (response) {
-                        if (response === 0) { // Runs the following if 'Yes' is clicked
-                            try {
-                                fs.unlinkSync(path.join(userFolder, 'notes', filename));
-                            } catch (error) { }
-                            win.close();
-                        }
-                    })
-                }
-            }
-
-        }
-
-        ipcMain.on('addWindow', addWindowFn);
-
-        function addWindowFn(e, wId) {
-            if (wId == winId) {
-                let nt = new Note("", "", undefined, undefined, 200, 200, undefined);
-                nt.createWindow();
-            }
-        }
+        
 
         ipcMain.on('saveText', (e, message) => {
             let wId = message.windowId;
             let text = message.text;
 
-            if (winId == wId) {
+            if (this.id == wId) {
                 let position = this.window.getPosition();
                 let size = this.window.getSize();
 
                 var node = { name: this.name, text: text, x: position[0], y: position[1], width: size[0], height: size[1] };
-                var jsonFile = path.join(userFolder, 'notes', filename);
+                var jsonFile = path.join(userFolder, 'notes', this.filename);
                 if (text) {
                     fs.writeFile(jsonFile, JSON.stringify(node), 'utf8', callback);
                 } else {

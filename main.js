@@ -1,11 +1,8 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('path')
 const url = require('url')
 
 const Note = require('./note');
-// Mantenha uma referencia global do objeto da janela, se você não fizer isso, a janela será
-// fechada automaticamente quando o objeto JavaScript for coletado.
-let win
 
 let notes = [];
 
@@ -14,20 +11,20 @@ var fs = require('fs');
 var folder = path.join(app.getPath('userData'), 'notes');
 try {
     fs.mkdirSync(folder);
-} catch (error) {}
+} catch (error) { }
 
 var items = fs.readdirSync(folder);
- 
-for (var i=0; i<items.length; i++) {
+
+for (var i = 0; i < items.length; i++) {
     var filePath = path.join(folder, items[i]);
     console.log(filePath);
     var dataToParse = fs.readFileSync(filePath, { encoding: 'utf-8' });
     var data = JSON.parse(dataToParse);
 
-    let note = new Note(data.text, data.text,data.x, data.y, data.width, data.height, items[i]);
+    let note = new Note(data.text, data.text, data.x, data.y, data.width, data.height, items[i]);
     notes.push(note);
 }
-if(notes.length == 0){
+if (notes.length == 0) {
     let note = new Note("", "", undefined, undefined, 250, 250, undefined);
     notes.push(note);
 }
@@ -39,33 +36,21 @@ function createWindow() {
     var aWhile = 200; // 1 milisecond to enable transparency in the first window
 
     var doSomethingAfterAWhile = function () {
-        for (var i=0; i<notes.length; i++){
+        for (var i = 0; i < notes.length; i++) {
             notes[i].createWindow();
         }
-        
     }
     setTimeout(doSomethingAfterAWhile, aWhile);
-
-    
-
-    
-
 }
 
 
 const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
-    // Someone tried to run a second instance, we should focus our window.
-    // if (win) {
-    //     if (win.isMinimized()) win.restore()
-    //     win.focus()
-    // }
-
-    for (var i=0; i<notes.length; i++){
+    for (var i = 0; i < notes.length; i++) {
         if (notes[i].window === null) {
-            if (win.isMinimized()) win.restore()
-                win.focus()
+            if (notes[i].window.isMinimized()) notes[i].window.restore()
+            notes[i].window.focus()
         }
-        
+
     }
 })
 
@@ -74,36 +59,21 @@ if (shouldQuit) {
     return
 }
 
-// Este método será chamado quando o Electron tiver finalizado
-// a inicialização e está pronto para criar a janela browser.
-// Algumas APIs podem ser usadas somente depois que este evento ocorre.
 app.on('ready', createWindow);
 app.showExitPrompt = true;
 
-
-
-
-// Finaliza quando todas as janelas estiverem fechadas.
 app.on('window-all-closed', () => {
-    // No macOS é comum para aplicativos e sua barra de menu 
-    // permaneçam ativo até que o usuário explicitamente encerre com Cmd + Q
     if (process.platform !== 'darwin') {
         app.quit()
     }
 })
 
 app.on('activate', () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    // if (win === null) {
-    //     createWindow()
-    // }
-
-    for (var i=0; i<notes.length; i++){
+    for (var i = 0; i < notes.length; i++) {
         if (notes[i].window === null) {
             notes[i].createWindow();
         }
-        
+
     }
 })
 
@@ -112,4 +82,72 @@ app.on('activate', () => {
 
 process.on('uncaughtException', function (err) {
     console.log(err);
-  })
+})
+
+ipcMain.on('deleteNote', (e, wId) => {
+
+
+    if (app.showExitPrompt) {
+        e.preventDefault() // Prevents the window from closing 
+        dialog.showMessageBox({
+            type: 'question',
+            buttons: ['Yes', 'No'],
+            title: 'Confirm',
+            message: 'Are you sure you want to delete?'
+        }, (response) => {
+            if (response === 0) { // Runs the following if 'Yes' is clicked
+                let note;
+                var userFolder = app.getPath('userData');
+                for (var i = 0; i < notes.length; i++) {
+                    notes[i].window.setSkipTaskbar(true);
+                    if (notes[i].id == wId) {
+                        note = notes[i];
+                        notes.splice(i, 1);
+                        break;
+                    }
+
+
+                }
+                if (notes.length > 0) {
+                    notes[0].window.setSkipTaskbar(false);
+                }
+
+                try {
+                    fs.unlinkSync(path.join(userFolder, 'notes', note.filename));
+                } catch (error) { }
+                note.window.removeAllListeners();
+                note.window.close();
+                note.window = null;
+                note = null;
+            }
+        })
+    }
+
+
+});
+
+ipcMain.on('addWindow', (e, wId) => {
+    let nt = new Note("", "", undefined, undefined, 250, 250, undefined);
+    nt.createWindow();
+    notes.push(nt);
+});
+
+ipcMain.on('restoreAll', () => {
+    for (var i = 0; i < notes.length; i++) {
+        notes[i].window.restore();
+    }
+});
+
+ipcMain.on('minimizeAll', () => {
+    for (var i = 0; i < notes.length; i++) {
+        notes[i].window.minimize();
+    }
+});
+
+ipcMain.on('closeAll', () => {
+    app.quit();
+
+});
+
+
+
