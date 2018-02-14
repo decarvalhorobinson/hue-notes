@@ -48,7 +48,7 @@ class Note {
             height: this.height,
             frame: false,
             icon: path.join(__dirname, 'assets/icons/icon.png'),
-            transparent: true,
+            transparent: false,
         })
         this.window.setSkipTaskbar
         // e carrega index.html do app.

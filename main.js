@@ -25,7 +25,7 @@ for (var i = 0; i < items.length; i++) {
     notes.push(note);
 }
 if (notes.length == 0) {
-    let note = new Note("", "", undefined, undefined, 250, 250, undefined);
+    let note = new Note("", "", undefined, undefined, 280, 300, undefined);
     notes.push(note);
 }
 
@@ -127,7 +127,7 @@ ipcMain.on('deleteNote', (e, wId) => {
 });
 
 ipcMain.on('addWindow', (e, wId) => {
-    let nt = new Note("", "", undefined, undefined, 250, 250, undefined);
+    let nt = new Note("", "", undefined, undefined, 280, 300, undefined);
     nt.createWindow();
     notes.push(nt);
 });
