@@ -110,6 +110,7 @@ class Note {
 
         this.window.on('focus', () => {
             this.window.webContents.send('focus');
+            ipcMain.emit('restoreAll');
         })
 
         this.window.on('minimize', () => {
