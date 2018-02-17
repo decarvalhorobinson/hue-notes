@@ -1,16 +1,13 @@
 html{
 
     height: 100vh;
-    box-shadow:inset 0px 0px 0px 1px rgb(121, 134, 255);
     
 }
 body {
-    background-color: rgba(171, 237, 242, 0.95);
     margin: 1px;
     padding: none;
     height: 100%;
     font-family:  Arial, Helvetica, sans-serif;
-    color: rgb(51, 49, 75);
     font-size: 15px;
     height: 100%;
     overflow: hidden;
@@ -31,8 +28,6 @@ body {
     min-height: 2em;
     justify-content: space-between;
     align-content: center;
-    background-color: rgba(0, 187, 211, 0.8);
-    border-bottom: 1px dashed rgb(130, 240, 255);
     -webkit-user-select: none;
     user-select: none;
     -webkit-app-region: drag;
@@ -46,20 +41,6 @@ body {
     display: block;
     width: auto;
     height: auto;
-    color: white;
-    text-align: center;
-    font-weight: bold;
-    
-}
-
-.win-btn:hover{
-    -webkit-app-region: no-drag;
-    padding: 0.5em;
-    cursor: pointer;
-    width: auto;
-    height: auto;
-    color: white;
-    background-color: rgba(24, 24, 11, 0.3);
     text-align: center;
     font-weight: bold;
     
@@ -85,10 +66,95 @@ body {
 
 .note-text-content::-webkit-scrollbar-thumb {
     border-radius: 0.5em / 1em;
-    background-color: rgba(0, 123, 139, 0.8);
-    outline: 1px solid slategrey;
 }
 
 [contenteditable]:focus {
     outline: 0px solid transparent;
 }
+
+/* Different colors */
+/* DEFAULT */
+/* Different colors */
+html{
+    box-shadow:inset 0px 0px 0px 1px rgb(121, 134, 255);
+}
+
+body{
+    background-color: rgba(171, 237, 242, 0.95);
+    color: rgb(51, 49, 75);
+}
+
+.nav{
+    background-color: rgba(0, 187, 211, 0.8);
+    border-bottom: 1px dashed rgb(130, 240, 255);
+}
+
+.win-btn{
+    color: white;
+}
+
+.win-btn:hover{
+    background-color: rgba(24, 24, 11, 0.3);   
+}
+
+.note-text-content::-webkit-scrollbar-thumb{
+    background-color: rgba(0, 123, 139, 0.8);
+}
+
+/* END DEFAULT COLOR */
+
+/* RED COLOR */
+html.red{
+    box-shadow:inset 0px 0px 0px 1px rgb(190, 0, 32);
+}
+
+.red body{
+    background-color: rgba(237, 96, 114, 0.95);
+    color: rgb(0, 0, 0);
+}
+
+.red .nav{
+    background-color: rgba(238, 0, 55, 0.8);
+    border-bottom: 1px dashed rgb(237, 96, 114);
+}
+
+.red .win-btn{
+    color: white;
+}
+
+.red .win-btn:hover{
+    background-color: rgba(24, 24, 11, 0.3);   
+}
+
+.red .note-text-content::-webkit-scrollbar-thumb{
+    background-color: rgba(206, 0, 43, 0.8);
+}
+/* END RED COLOR */
+
+/* YELLOW COLOR */
+html.yellow{
+    box-shadow:inset 0px 0px 0px 1px rgb(255, 166, 0);
+}
+
+.yellow body{
+    background-color: rgba(249, 239, 127, 0.95);
+    color: rgb(38, 38, 38);
+}
+
+.yellow .nav{
+    background-color: rgba(254, 190, 0, 0.8);
+    border-bottom: 1px dashed rgb(250, 247, 177);
+}
+
+.yellow .win-btn{
+    color: white;
+}
+
+.yellow .win-btn:hover{
+    background-color: rgba(24, 24, 11, 0.3);   
+}
+
+.yellow .note-text-content::-webkit-scrollbar-thumb{
+    background-color: rgba(255, 144, 0, 0.8);
+}
+/* END YELLOW COLOR */
