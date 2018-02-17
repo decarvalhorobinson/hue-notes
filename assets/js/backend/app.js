@@ -18,14 +18,26 @@ module.exports = function () {
 
     for (var i = 0; i < items.length; i++) {
         var filePath = path.join(folder, items[i]);
-        console.log(filePath);
         var dataToParse = fs.readFileSync(filePath, { encoding: 'utf-8' });
         var note;
         try {
             data = JSON.parse(dataToParse);
-            note = new Note(data.name, data.text, data.x, data.y, data.width, data.height, data.color, items[i]);
+            note = new Note({   
+                                name: data.name, 
+                                text: data.text, 
+                                x: data.x, 
+                                y: data.y, 
+                                width: data.width, 
+                                height: data.height, 
+                                color: data.color, 
+                                transparent:data.transparent, 
+                                filename:items[i]});
         } catch (error) {
-            note = new Note("", "", undefined, undefined, 280, 300, undefined, items[i]);
+            note = new Note({   name: "", 
+                                text: "", 
+                                width: 280, 
+                                height:300, 
+                                filename:items[i]});
             
         }
         notes.push(note);
@@ -33,7 +45,10 @@ module.exports = function () {
         
     }
     if (notes.length == 0) {
-        let note = new Note("", "", undefined, undefined, 280, 300, undefined, undefined);
+        let note = new Note({name: "",
+                            text: "",
+                            width: 280,
+                            height: 300});
         notes.push(note);
     }
 
@@ -135,8 +150,8 @@ module.exports = function () {
 
     });
 
-    ipcMain.on('addWindow', (e, wId) => {
-        let nt = new Note("", "", undefined, undefined, 280, 300, undefined, undefined);
+    ipcMain.on('addWindow', (e, color) => {
+        let nt = new Note({name:"", text:"",width:280, height:300, color:color});
         nt.createWindow();
         notes.push(nt);
     });
@@ -155,7 +170,7 @@ module.exports = function () {
 
     ipcMain.on('closeAll', () => {
         for (var i = 0; i < notes.length; i++) {
-            var node = notes[i];
+            var note = notes[i];
             var jsonFile = path.join(app.getPath('userData'), 'notes', note.filename);
             fs.writeFile(jsonFile, JSON.stringify(note), 'utf8', callback);
             function callback() {}

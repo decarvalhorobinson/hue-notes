@@ -38,12 +38,14 @@ body {
     -webkit-app-region: no-drag;
     padding: 0.5em;
     cursor: pointer;
-    display: block;
     width: auto;
     height: auto;
     text-align: center;
     font-weight: bold;
     
+}
+.group-btn-left{
+    display: flex;
 }
 
 .note-text{
@@ -68,6 +70,55 @@ body {
     border-radius: 0.5em / 1em;
 }
 
+.config-button:hover .config{
+    visibility: visible;
+    opacity:1;
+    transition: none;
+    transition:visibility 0s linear 0.2s,opacity 0.2s linear;
+}
+
+.config{
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    right: 0;
+    width: auto;
+    height: auto;
+    background-color: white;
+    border-radius: 0.5em;
+    visibility: hidden;
+    opacity:0;
+    transition:visibility 0s linear 0.5s,opacity 0.5s linear;
+}
+
+.color-option{
+    width: 2em;
+    height: 2em;
+    padding: 1em;
+    color: white;
+}
+.color-option span{
+    width: 100%;
+    height: 100%;
+    display: inline-block;  
+}
+
+span.red{
+    background-color: rgb(237, 96, 114);
+}
+
+span.yellow{
+    background-color: rgb(249, 239, 127);
+}
+
+span.black{
+    background-color: rgb(42, 53, 59);
+}
+
+span.default{
+    background-color: rgb(171, 237, 242);
+}
+
 [contenteditable]:focus {
     outline: 0px solid transparent;
 }
@@ -85,7 +136,7 @@ body{
 }
 
 .nav{
-    background-color: rgba(0, 187, 211, 0.8);
+    background-color: rgba(0, 187, 211, 0.95);
     border-bottom: 1px dashed rgb(130, 240, 255);
 }
 
@@ -105,7 +156,7 @@ body{
 
 /* RED COLOR */
 html.red{
-    box-shadow:inset 0px 0px 0px 1px rgb(190, 0, 32);
+    box-shadow:inset 0px 0px 0px 1px rgb(190, 0, 95);
 }
 
 .red body{
@@ -156,5 +207,33 @@ html.yellow{
 
 .yellow .note-text-content::-webkit-scrollbar-thumb{
     background-color: rgba(255, 144, 0, 0.8);
+}
+/* END YELLOW COLOR */
+
+/* YELLOW COLOR */
+html.black{
+    box-shadow:inset 0px 0px 0px 1px rgb(0, 0, 0);
+}
+
+.black body{
+    background-color: rgba(42, 53, 59, 0.95);
+    color: rgb(205, 215, 219);
+}
+
+.black .nav{
+    background-color: rgba(16, 22, 26, 0.8);
+    border-bottom: 1px dashed rgb(66, 74, 77);
+}
+
+.black .win-btn{
+    color: rgb(205, 215, 219);;
+}
+
+.black .win-btn:hover{
+    background-color: rgba(247, 247, 214, 0.3);   
+}
+
+.black .note-text-content::-webkit-scrollbar-thumb{
+    background-color: rgba(34, 26, 26, 0.8);
 }
 /* END YELLOW COLOR */

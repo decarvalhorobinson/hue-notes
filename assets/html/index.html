@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="yellow">
+<html>
 
 <head>
     <meta charset="UTF-8">
@@ -11,8 +11,23 @@
 <body>
     <div class="wrapper" id="wrapper">
         <header class="nav" id="nav">
-            <div id="addButton" class="win-btn"><i class="fas fa-plus"></i></div>
-            <div id="closeButton" class="win-btn"><i class="far fa-trash-alt"></i></div>
+            <div id="addButton" class="win-btn">
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="group-btn-left">
+                <div class="win-btn config-button" style="position: relative">
+                    <i class="fas fa-cog"></i>
+                    <div class="config">
+                        <div class="color-option"><span class="red" onclick="changeColor(event)"></span></div>
+                        <div class="color-option"><span class="yellow" onclick="changeColor(event)"></span></div>
+                        <div class="color-option"><span class="black" onclick="changeColor(event)"></span></div>
+                        <div class="color-option"><span class="default" onclick="changeColor(event)"></span></div>
+                    </div>
+                </div>
+                <div id="closeButton" class="win-btn">
+                    <i class="far fa-trash-alt"></i>
+                </div>
+            </div>
         </header>
         <div class="note-text">
             <div id="note-text" class="note-text-content" contentEditable="true">

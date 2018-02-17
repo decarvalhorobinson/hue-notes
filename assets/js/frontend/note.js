@@ -1,8 +1,17 @@
 const electron = require('electron');
 const { ipcRenderer } = electron;
-const closeButton = document.querySelector('#closeButton');
 var id;
 var color;
+
+function changeColor(event){
+    document.querySelector('html').className = event.target.className;
+    color = event.target.className;
+    if (id) {
+        ipcRenderer.send('saveText', { text: noteText.innerHTML, id: id, color: color });
+    }
+}
+
+const closeButton = document.querySelector('#closeButton');
 closeButton.addEventListener('click', () => {
     if(id){
         ipcRenderer.send('deleteNote', id);
@@ -12,7 +21,7 @@ closeButton.addEventListener('click', () => {
 const addButton = document.querySelector('#addButton');
 addButton.addEventListener('click', () => {
     if(id){
-        ipcRenderer.send('addWindow', id);
+        ipcRenderer.send('addWindow', color);
     }
 });
 

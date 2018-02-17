@@ -8,7 +8,7 @@ var userFolder = app.getPath('userData');
 
 class Note {
 
-    constructor(name, text, x, y, width, height, color, filename) {
+    constructor({name="", text="", x, y, width, height, color, transparent, filename}) {
         this.name = name;
         this.text = text;
         this.x = x;
@@ -16,6 +16,7 @@ class Note {
         this.width = width;
         this.height = height;
         this.color = color;
+        this.transparent = transparent;
         
         if (filename == undefined) {
             this.id = new Date().getTime();
@@ -39,7 +40,7 @@ class Note {
             height: this.height,
             frame: false,
             icon: path.join(__dirname, '../../icons/icon.png'),
-            transparent: false,
+            transparent: this.transparent
         })
         // e carrega index.html do app.
         this.window.loadURL(url.format({
