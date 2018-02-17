@@ -8,14 +8,14 @@ var userFolder = app.getPath('userData');
 
 class Note {
 
-    constructor(name, text, x, y, width, height, filename) {
+    constructor(name, text, x, y, width, height, color, filename) {
         this.name = name;
         this.text = text;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.color = "default-color";
+        this.color = color;
         
         if (filename == undefined) {
             this.id = new Date().getTime();
@@ -103,6 +103,7 @@ class Note {
             this.y = note.y = position[1];
             this.width = note.width = size[0];
             this.height = note.height = size[1];
+            this.color = note.color;
             var jsonFile = path.join(userFolder, 'notes', this.filename);
             fs.writeFile(jsonFile, JSON.stringify(this), 'utf8', callback);
             function callback() {

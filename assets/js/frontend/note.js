@@ -2,6 +2,7 @@ const electron = require('electron');
 const { ipcRenderer } = electron;
 const closeButton = document.querySelector('#closeButton');
 var id;
+var color;
 closeButton.addEventListener('click', () => {
     if(id){
         ipcRenderer.send('deleteNote', id);
@@ -17,6 +18,8 @@ addButton.addEventListener('click', () => {
 
 ipcRenderer.on('nodeLoad', (event, note) => {
     document.querySelector('#note-text').innerHTML = note.text;
+    document.querySelector('html').className = note.color;
+    color = note.color;
     id = note.id;
 });
 
@@ -32,17 +35,17 @@ ipcRenderer.on('focus', () => {
 const noteText = document.querySelector('#note-text');
 noteText.addEventListener('keyup', () => {
     if(id){
-        ipcRenderer.send('saveText', { text: noteText.innerHTML, id: id });
+        ipcRenderer.send('saveText', { text: noteText.innerHTML, id: id, color: color });
     }
 });
 noteText.addEventListener('keypressed', () => {
     if(id){
-        ipcRenderer.send('saveText', { text: noteText.innerHTML, id: id });
+        ipcRenderer.send('saveText', { text: noteText.innerHTML, id: id, color: color});
     }
 });
 noteText.addEventListener('keydown', () => {
     if(id){
-        ipcRenderer.send('saveText', { text: noteText.innerHTML, id: id });
+        ipcRenderer.send('saveText', { text: noteText.innerHTML, id: id, color: color });
     }
 });
 

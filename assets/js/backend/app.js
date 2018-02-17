@@ -23,9 +23,9 @@ module.exports = function () {
         var note;
         try {
             data = JSON.parse(dataToParse);
-            note = new Note(data.name, data.text, data.x, data.y, data.width, data.height, items[i]);
+            note = new Note(data.name, data.text, data.x, data.y, data.width, data.height, data.color, items[i]);
         } catch (error) {
-            note = new Note("", "", undefined, undefined, 280, 300, items[i]);
+            note = new Note("", "", undefined, undefined, 280, 300, undefined, items[i]);
             
         }
         notes.push(note);
@@ -33,7 +33,7 @@ module.exports = function () {
         
     }
     if (notes.length == 0) {
-        let note = new Note("", "", undefined, undefined, 280, 300, undefined);
+        let note = new Note("", "", undefined, undefined, 280, 300, undefined, undefined);
         notes.push(note);
     }
 
@@ -136,7 +136,7 @@ module.exports = function () {
     });
 
     ipcMain.on('addWindow', (e, wId) => {
-        let nt = new Note("", "", undefined, undefined, 280, 300, undefined);
+        let nt = new Note("", "", undefined, undefined, 280, 300, undefined, undefined);
         nt.createWindow();
         notes.push(nt);
     });
