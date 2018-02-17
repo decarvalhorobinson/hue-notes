@@ -34,6 +34,7 @@ body {
     background-color: rgba(0, 187, 211, 0.8);
     border-bottom: 1px dashed rgb(130, 240, 255);
     -webkit-user-select: none;
+    user-select: none;
     -webkit-app-region: drag;
     visibility: hidden;
 }
@@ -76,6 +77,16 @@ body {
     overflow: auto;
     height: 100%;
     width: 100%;
+}
+
+.note-text-content::-webkit-scrollbar {
+    width: 0.3em;
+}
+
+.note-text-content::-webkit-scrollbar-thumb {
+    border-radius: 0.5em / 1em;
+    background-color: rgba(0, 123, 139, 0.8);
+    outline: 1px solid slategrey;
 }
 
 [contenteditable]:focus {
