@@ -2,23 +2,51 @@
   "name": "hue-notes",
   "version": "1.0.0",
   "description": "A note app for myself",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron --enable-transparent-visuals --disable-gpu .",
-    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/icon.icns --prune=true --out=release-builds/mac",
-    "package-win": "electron-packager . --disable-gpu hue-notes --overwrite --asar=true --platform=win32 --arch=all --icon=assets/icons/icon.ico --prune=true --out=release-builds/win --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName='Hue Notes App'",
-    "package-linux": "electron-packager .  --enable-transparent-visuals --disable-gpu hue-notes --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/icon.png --prune=true --out=release-builds/linux"
-  },
+  "author": "Robinson Carvalho <decarvalhorobinson@outlook.com>",
+  "license": "MIT",
   "keywords": [
     "notes",
     "app",
     "windowslike"
   ],
-  "author": "Robinson Carvalho",
-  "license": "MIT",
+  "repository": "https://github.com/decarvalhorobinson/hue-notes.git",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron --enable-transparent-visuals --disable-gpu .",
+    "build": "build --win --linux --mac",
+    "ship": "build -p always"
+  },
+  "build": {
+    "appId": "hue.notes",
+    "asar": true,
+    "mac": {
+      "target": "tar.gz",
+      "icon": "build/icon.icns",
+      "category": "Utility"
+    },
+    "linux": {
+
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility",
+      "desktop":{
+      "StartupWMClass":"hue-notes"
+      }      
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
+    }
+  },
+
   "devDependencies": {
     "electron": "^1.8.2",
-    "electron-builder": "^20.0.4",
+    "electron-builder": "^20.0.5",
     "electron-packager": "^11.0.1"
+  },
+  "dependencies": {
+    "electron-updater": "^2.20.1"
   }
 }

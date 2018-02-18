@@ -39,7 +39,6 @@ class Note {
             width: this.width,
             height: this.height,
             frame: false,
-            icon: path.join(__dirname, '../../icons/icon.png'),
             transparent: this.transparent
         })
         // e carrega index.html do app.

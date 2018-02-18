@@ -2,3 +2,5 @@ node_modules/
 .vscode/
 notes/
 release-builds/
+dist/
+electron-builder.yml
